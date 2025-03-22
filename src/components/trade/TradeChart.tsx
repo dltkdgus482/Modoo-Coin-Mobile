@@ -1,69 +1,122 @@
+// Types
+interface CryptoDataProps {
+  market: string;
+  timestamp: number;
+  trade_price: number;
+}
+
+// Utils
+import { getPastCryptoData } from '../../utils/tradeUtils';
+
 // Libraries
 import styled from 'styled-components';
-import { LineChart, Line, ResponsiveContainer, ReferenceDot } from 'recharts';
-
-// DummyData
-import { data } from '../../mocks/tradeDummyData';
+import { useState, useEffect } from 'react';
+import {
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  ReferenceDot,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 // Other Components
 import TradeChartOption from './TradeChartOption';
 
-const TradeChart = () => {
-  const maxDataPoint = data.reduce(
-    (max, item) => (item.pv > max.pv ? item : max),
-    data[0]
+const TradeChart = ({ data, setData }) => {
+  const [type, setType] = useState<string>('seconds');
+  const [minDataPoint, setMinDataPoint] = useState<CryptoDataProps | null>(
+    null
   );
-  const minDataPoint = data.reduce(
-    (min, item) => (item.pv < min.pv ? item : min),
-    data[0]
+  const [maxDataPoint, setMaxDataPoint] = useState<CryptoDataProps | null>(
+    null
   );
 
-  const maxIndex = data.findIndex((item) => item === maxDataPoint);
-  const minIndex = data.findIndex((item) => item === minDataPoint);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getPastCryptoData({ type: type });
+      setData(result);
+    };
+
+    fetchData();
+  }, [type]);
+
+  useEffect(() => {
+    if (data.length === 0) return;
+
+    const max = data.reduce(
+      (a, b) => (a.trade_price > b.trade_price ? a : b),
+      data[0]
+    );
+    const min = data.reduce(
+      (a, b) => (a.trade_price < b.trade_price ? a : b),
+      data[0]
+    );
+
+    setMaxDataPoint(max);
+    setMinDataPoint(min);
+  }, [data]);
+
+  if (data.length === 0) return <div>로딩 중 ...</div>;
 
   return (
     <Container>
       <ResponsiveContainer width="90%" height="60%">
-        <LineChart data={data} margin={{ top: 40 }}>
+        <LineChart
+          data={data}
+          margin={{ top: 20, left: 0, right: 0, bottom: 20 }}
+        >
+          <XAxis
+            dataKey="timestamp"
+            hide
+            type="number"
+            domain={['auto', 'auto']}
+            scale="time" // 시간 기준 x축
+          />
+          <YAxis domain={['auto', 'auto']} hide />
           <Line
             type="monotone"
-            dataKey="pv"
+            dataKey="trade_price"
             stroke="#008485"
             strokeWidth={2}
             dot={false}
+            isAnimationActive={true}
           />
-          {/* 최고값 표시 */}
-          <ReferenceDot
-            x={maxIndex}
-            y={maxDataPoint.pv}
-            r={4}
-            fill="#008485"
-            label={{
-              value: `최고 ${maxDataPoint.pv.toLocaleString()}`,
-              position: 'top',
-              fontSize: '1rem',
-              fontWeight: 600,
-              fill: '#E90061',
-            }}
-          />
-
-          {/* 최저값 표시 */}
-          <ReferenceDot
-            x={minIndex}
-            y={minDataPoint.pv}
-            r={4}
-            fill="#008485"
-            label={{
-              value: `최저 ${minDataPoint.pv.toLocaleString()}`,
-              position: 'bottom',
-              fontSize: '1rem',
-              fontWeight: 600,
-              fill: '#2C77EF',
-            }}
-          />
+          {maxDataPoint && (
+            <ReferenceDot
+              x={maxDataPoint.timestamp}
+              y={maxDataPoint.trade_price}
+              ifOverflow="visible"
+              r={4}
+              fill="#008485"
+              label={{
+                value: `최고 ${maxDataPoint.trade_price.toLocaleString()}`,
+                position: 'top',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                fill: '#E90061',
+              }}
+            />
+          )}
+          {minDataPoint && (
+            <ReferenceDot
+              x={minDataPoint.timestamp}
+              y={minDataPoint.trade_price}
+              ifOverflow="visible"
+              r={4}
+              fill="#008485"
+              label={{
+                value: `최저 ${minDataPoint.trade_price.toLocaleString()}`,
+                position: 'bottom',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                fill: '#2C77EF',
+              }}
+            />
+          )}
         </LineChart>
-        <TradeChartOption />
       </ResponsiveContainer>
+      <TradeChartOption setType={setType} />
     </Container>
   );
 };

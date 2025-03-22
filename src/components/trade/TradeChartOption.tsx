@@ -1,4 +1,9 @@
 // Types
+interface TradeChartOptionProps {
+  setType: (type: string) => void;
+}
+
+// Types
 interface StyledTextProps {
   selected?: boolean;
 }
@@ -7,9 +12,24 @@ interface StyledTextProps {
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const TradeChartOption = () => {
+// ETC
+const mappingOptions = {
+  실시간: 'seconds',
+  '1일': 'days',
+  '1주': 'weeks',
+  '1개월': 'months',
+  '1년': 'years',
+} as const;
+
+const TradeChartOption = ({ setType }: TradeChartOptionProps) => {
   const [currentOption, setCurrentOption] = useState<string>('실시간');
-  const options = ['실시간', '1일', '1주', '1개월', '1년'];
+  const options: (keyof typeof mappingOptions)[] = [
+    '실시간',
+    '1일',
+    '1주',
+    '1개월',
+    '1년',
+  ];
 
   return (
     <Container>
@@ -17,7 +37,10 @@ const TradeChartOption = () => {
         <StyledText
           key={option}
           selected={currentOption === option}
-          onClick={() => setCurrentOption(option)}
+          onClick={() => {
+            setCurrentOption(option);
+            setType(mappingOptions[option]);
+          }}
         >
           {option}
         </StyledText>

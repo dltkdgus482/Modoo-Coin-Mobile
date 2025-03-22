@@ -6,11 +6,11 @@ import TradeHeader from './TradeHeader';
 import TradeMain from './TradeMain';
 import TradeFooter from './TradeFooter';
 
-const TradeContainer = () => {
+const TradeContainer = ({ data, setData }) => {
   return (
     <Container>
-      <TradeHeader />
-      <TradeMain />
+      <TradeHeader/>
+      <TradeMain data={data} setData={setData} />
       <TradeFooter />
     </Container>
   );

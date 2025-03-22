@@ -15,7 +15,7 @@ const TradeInfo: React.FC<TradeInfoProps> = ({
   changeSign,
   changeRate,
 }) => {
-  const changePrice = currentPrice * +changeRate * 0.01;
+  const changePrice = currentPrice * +changeRate;
 
   return (
     <Container>
@@ -24,8 +24,9 @@ const TradeInfo: React.FC<TradeInfoProps> = ({
         {currentPrice ? currentPrice.toLocaleString() : 0}
       </StyledText>
       <StyledText style={{ color: +changeRate > 0 ? '#E90061' : 'blue' }}>
-        {changeSign === 1 ? '+' : '-'}
-        {changePrice.toLocaleString()}({changeRate})%
+        {changeSign === 1 ? '+' : ''}
+        {parseInt(changePrice.toFixed(0)).toLocaleString()} (
+        {(+changeRate * 100).toFixed(2)})%
       </StyledText>
     </Container>
   );
@@ -45,7 +46,7 @@ const Container = styled.div`
 
 const StyledText = styled.p`
   font-weight: 600;
-  
+
   &:nth-child(3) {
     padding-top: 2%;
   }

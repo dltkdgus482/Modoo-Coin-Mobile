@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.15",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-price-animation": "^1.0.9",
     "react-router-dom": "^7.4.0",
     "recharts": "^2.15.1",
     "sonner": "^2.0.1",

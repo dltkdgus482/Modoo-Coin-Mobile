@@ -36,6 +36,14 @@ const Container = styled.div`
 const BackButton = styled.img`
   width: auto;
   height: 30%;
+
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+
+  &:active {
+    transform: scale(0.9);
+  }
 `;
 
 const Favorite = styled.img`

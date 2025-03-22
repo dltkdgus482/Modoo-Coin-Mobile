@@ -6,8 +6,10 @@ import App from './App.tsx';
 import { Toaster } from 'sonner';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
+  <>
     <App />
     <Toaster />
-  </StrictMode>
+  </>
+  // </StrictMode>
 );
