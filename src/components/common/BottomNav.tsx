@@ -13,7 +13,7 @@ const Container = styled.div`
   height: 10%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
 
   background-color: white;

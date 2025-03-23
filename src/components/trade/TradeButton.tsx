@@ -2,14 +2,22 @@
 interface TradeButtonProps {
   text: string;
   backgroundColor: string;
+  onClick?: () => void;
 }
 
 // Libraries
 import styled from 'styled-components';
 
-const TradeButton: React.FC<TradeButtonProps> = ({ text, backgroundColor }) => {
+const TradeButton: React.FC<TradeButtonProps> = ({
+  text,
+  backgroundColor,
+  onClick,
+}) => {
   return (
-    <StyledButton style={{ backgroundColor: `${backgroundColor}` }}>
+    <StyledButton
+      onClick={onClick}
+      style={{ backgroundColor: `${backgroundColor}` }}
+    >
       {text}
     </StyledButton>
   );

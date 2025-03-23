@@ -19,7 +19,7 @@ export const useUpbitTradeSocket = (market: string) => {
       const subscribeMessage = JSON.stringify([
         { ticket: 'unique_ticket' },
         {
-          type: 'ticker',
+          type: 'trade',
           codes: [market],
         },
       ]);

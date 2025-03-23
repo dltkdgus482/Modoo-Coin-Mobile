@@ -1,5 +1,5 @@
 // Assets
-import backArrow from '../../assets/trade/backArrow.png';
+import Logo from '/public/favicon.ico';
 
 // Libraries
 import styled from 'styled-components';
@@ -7,7 +7,8 @@ import styled from 'styled-components';
 const HomeHeader = () => {
   return (
     <Container>
-      <BackButton src={backArrow} />
+      <Diamond src={Logo} />
+      <StyledText>모두의 코인</StyledText>
     </Container>
   );
 };
@@ -20,19 +21,18 @@ const Container = styled.div`
   height: 10%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-start;
   align-items: center;
+  gap: 1.5%;
 `;
 
-const BackButton = styled.img`
+const Diamond = styled.img`
   width: auto;
   height: 30%;
+`;
 
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
-
-  &:active {
-    transform: scale(0.9);
-  }
+const StyledText = styled.p`
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
 `;

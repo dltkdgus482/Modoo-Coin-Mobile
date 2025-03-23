@@ -6,11 +6,11 @@ import HomeHeader from './HomeHeader';
 import HomeMain from './HomeMain';
 import HomeFooter from './HomeFooter';
 
-const HomeContainer = () => {
+const HomeContainer = ({ data }) => {
   return (
     <Container>
       <HomeHeader />
-      <HomeMain />
+      <HomeMain data={data} />
       <HomeFooter />
     </Container>
   );
@@ -26,5 +26,5 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1);
 `;

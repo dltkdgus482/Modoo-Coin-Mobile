@@ -3,13 +3,16 @@ interface PurchaseFooterProps {
   currentInput: number[];
 }
 
+import { useNavigate } from 'react-router-dom';
 // Libraries
 import styled from 'styled-components';
 
 const PurchaseFooter = ({ currentInput }: PurchaseFooterProps) => {
+  const navigate = useNavigate();
+
   return (
     <Container>
-      <StyledButton>확인</StyledButton>
+      <StyledButton onClick={() => navigate('/trade')}>확인</StyledButton>
     </Container>
   );
 };

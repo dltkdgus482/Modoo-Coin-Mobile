@@ -1,47 +1,29 @@
+// Assets
+import money from '/src/assets/home/money.png'
+import home from '/src/assets/home/home.png'
+import myInfo from '/src/assets/home/myInfo.png'
+
 // Libraries
 import styled from 'styled-components';
 
+// Other Components
+import BottomNav from '../common/BottomNav';
+
 const HomeFooter = () => {
   return (
-    <Container>
-      <StyledButton>확인</StyledButton>
-    </Container>
+    <BottomNav>
+      <Icon src={money}/>
+      <Icon src={home}/>
+      <Icon src={myInfo}/>
+    </BottomNav>
   );
 };
 
 export default HomeFooter;
 
 // Styled Components
-const Container = styled.div`
-  width: 100%;
-  height: 10%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyledButton = styled.button`
-  width: 90%;
-  height: 60%;
-  color: white;
-  background-color: #008485;
-  font-size: 100%;
-  font-weight: 500;
-  border: none;
-  border-radius: 15px;
+const Icon = styled.img`
+  width: auto;
+  height: 30%;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    transform: translateY(2px);
-  }
-`;
+`

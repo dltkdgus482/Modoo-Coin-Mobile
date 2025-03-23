@@ -1,4 +1,5 @@
 // Assets
+import { useNavigate } from 'react-router-dom';
 import backArrow from '../../assets/trade/backArrow.png';
 import heart from '../../assets/trade/heart.png';
 import voidHeart from '../../assets/trade/voidHeart.png';
@@ -8,11 +9,16 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 const TradeHeader = () => {
+  const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   return (
     <Container>
-      <BackButton src={backArrow} />
+      <BackButton
+        src={backArrow}
+        alt="back-arrow"
+        onClick={() => navigate('/')}
+      />
       <Favorite
         src={isFavorite ? voidHeart : heart}
         onClick={() => setIsFavorite(!isFavorite)}

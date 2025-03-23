@@ -1,13 +1,20 @@
 // Assets
+import { useNavigate } from 'react-router-dom';
 import backArrow from '../../assets/trade/backArrow.png';
 
 // Libraries
 import styled from 'styled-components';
 
 const PurchaseHeader = () => {
+  const navigate = useNavigate();
+
   return (
     <Container>
-      <BackButton src={backArrow} />
+      <BackButton
+        src={backArrow}
+        alt="back-arrow"
+        onClick={() => navigate('/trade')}
+      />
     </Container>
   );
 };
