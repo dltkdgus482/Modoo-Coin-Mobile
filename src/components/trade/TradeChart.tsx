@@ -36,14 +36,14 @@ const TradeChart = () => {
     null
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getPastCryptoData({ type, coinName });
-      setData(result);
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await getPastCryptoData({ type, coinName });
+  //     setData(result);
+  //   };
 
-    fetchData();
-  }, [type]);
+  //   fetchData();
+  // }, [type]);
 
   useEffect(() => {
     if (data.length === 0) return;
