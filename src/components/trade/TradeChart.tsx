@@ -21,11 +21,18 @@ import {
   YAxis,
 } from 'recharts';
 
+// Contants
+import { coinArray } from '../../mocks/constants';
+
 // Other Components
 import TradeChartOption from './TradeChartOption';
 
+// Store
+import { useMergedTradeData } from '../../hooks/useMergedTradeData.ts';
+
 const TradeChart = () => {
   const { coinName } = useParams();
+  const coinPrices = useMergedTradeData(coinArray);
   const [data, setData] = useState<CryptoDataProps[]>([]);
   const [type, setType] = useState<string>('seconds');
   const [isAnimated, setIsAnimated] = useState<boolean>(false);
@@ -36,14 +43,29 @@ const TradeChart = () => {
     null
   );
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await getPastCryptoData({ type, coinName });
-  //     setData(result);
-  //   };
+  useEffect(() => {
+    if (coinName !== 'KRW-POT') return;
 
-  //   fetchData();
-  // }, [type]);
+    setData([
+      ...data,
+      {
+        market: 'KRW-POT',
+        timestamp: Date.now(),
+        trade_price: coinPrices['KRW-POT']?.trade_price ?? 0,
+      },
+    ]);
+  }, [coinPrices]);
+
+  useEffect(() => {
+    if (coinName === 'KRW-POT') return;
+
+    const fetchData = async () => {
+      const result = await getPastCryptoData({ type, coinName });
+      setData(result);
+    };
+
+    fetchData();
+  }, [type]);
 
   useEffect(() => {
     if (data.length === 0) return;

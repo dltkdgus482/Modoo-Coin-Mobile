@@ -5,12 +5,19 @@ import styled from 'styled-components';
 import useUserStore from '../../store/user.ts';
 import useCoinStore from '../../store/coin.ts';
 
+// Contants
+import { coinArray } from '../../mocks/constants';
+
+// Store
+import { useMergedTradeData } from '../../hooks/useMergedTradeData.ts';
+
 // Assets
 import BTC from '/src/assets/coin/KRW-BTC.png';
 import ETH from '/src/assets/coin/KRW-ETH.png';
 import XRP from '/src/assets/coin/KRW-XRP.png';
 import DOT from '/src/assets/coin/KRW-DOT.png';
 import ADA from '/src/assets/coin/KRW-ADA.png';
+import POT from '/src/assets/coin/KRW-POT.png';
 
 const coinNameMap: Record<string, string> = {
   'KRW-BTC': BTC,
@@ -18,6 +25,7 @@ const coinNameMap: Record<string, string> = {
   'KRW-XRP': XRP,
   'KRW-DOT': DOT,
   'KRW-ADA': ADA,
+  'KRW-POT': POT,
 };
 
 const PositionList = () => {
@@ -29,13 +37,13 @@ const PositionList = () => {
     setTradeData,
     tradeData,
   } = useUserStore();
-  const { coinPrices } = useCoinStore();
+  const coinPrices = useMergedTradeData(coinArray);
 
   return (
     <Container>
       <StyledText>현재 포지션</StyledText>
       <CoinListContainer>
-        {positionArray.length > 0 ?
+        {positionArray.length > 0 ? (
           positionArray.map((position, i) => {
             return (
               <Account key={i}>
@@ -51,9 +59,13 @@ const PositionList = () => {
                       {position.coinName}
                     </StyledInnerText>
                     <StyledInnerText>
-                      {coinPrices[
-                        position.coinName
-                      ].trade_price.toLocaleString()}
+                      {(
+                        
+                        (coinPrices[position.coinName]?.trade_price -
+                          position?.entryPrice) *
+                        (position?.orderType === 'Long' ? 1 : -1) *
+                        position?.quantity
+                      ).toLocaleString()}{' '}
                       원
                     </StyledInnerText>
                   </InnerInnerContainer>
@@ -95,7 +107,10 @@ const PositionList = () => {
                 </StyledButton>
               </Account>
             );
-          }) : <div>현재 포지션이 없습니다.</div>}
+          })
+        ) : (
+          <div>현재 포지션이 없습니다.</div>
+        )}
       </CoinListContainer>
     </Container>
   );

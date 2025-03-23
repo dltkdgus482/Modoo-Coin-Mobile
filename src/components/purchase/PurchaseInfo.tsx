@@ -8,11 +8,14 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
 // Store
-import useCoinStore from '../../store/coin';
+import { useMergedTradeData } from '../../hooks/useMergedTradeData.ts';
+
+// Contants
+import { coinArray } from '../../mocks/constants';
 
 const PurchaseInfo = ({ currentInput }: PurchaseInfoProps) => {
   const { coinName } = useParams();
-  const { coinPrices } = useCoinStore();
+  const  coinPrices = useMergedTradeData(coinArray);
 
   if (!coinName) return null;
 
@@ -21,7 +24,7 @@ const PurchaseInfo = ({ currentInput }: PurchaseInfoProps) => {
       <UpperContainer>
         <p style={{ color: 'rgba(0,0,0,0.45)' }}>주문할 가격</p>
         <p style={{ color: '#008485' }}>
-          {coinPrices[coinName].trade_price.toLocaleString()} 원
+          {coinPrices[coinName]?.trade_price?.toLocaleString() ?? 0} 원
         </p>
       </UpperContainer>
       <LowerContainer>
@@ -37,7 +40,7 @@ const PurchaseInfo = ({ currentInput }: PurchaseInfoProps) => {
           }}
         >
           {(
-            coinPrices[coinName].trade_price * parseInt(currentInput.join(''))
+            (coinPrices[coinName]?.trade_price ?? 0) * parseInt(currentInput.join(''))
           ).toLocaleString()}{' '}
           원
         </p>

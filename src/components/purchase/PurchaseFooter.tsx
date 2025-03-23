@@ -17,12 +17,18 @@ import useUserStore from '../../store/user';
 import useCoinStore from '../../store/coin';
 import { useNavigate, useParams } from 'react-router-dom';
 
+// Contants
+import { coinArray } from '../../mocks/constants';
+
+// Store
+import { useMergedTradeData } from '../../hooks/useMergedTradeData.ts';
+
 const PurchaseFooter = ({ currentInput }: PurchaseFooterProps) => {
   const navigate = useNavigate();
   const { coinName, orderType } = useParams();
   const { balance, positionArray, setPositionArray, setBalance } =
     useUserStore();
-  const { coinPrices } = useCoinStore();
+  const coinPrices = useMergedTradeData(coinArray);
 
   return (
     <Container>
@@ -32,7 +38,7 @@ const PurchaseFooter = ({ currentInput }: PurchaseFooterProps) => {
             return;
           }
 
-          const currentPrice = coinPrices[coinName].trade_price;
+          const currentPrice = coinPrices[coinName]?.trade_price;
           const quantity = parseInt(currentInput.join(''));
 
           if (currentPrice * quantity > balance) {
