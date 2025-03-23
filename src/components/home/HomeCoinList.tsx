@@ -32,7 +32,7 @@ const HomeCoinList = () => {
                       {coin}
                     </StyledInnerText>
                     <StyledInnerText>
-                      {coinPrices[coin].trade_price.toLocaleString()}원
+                      {coinPrices[coin]?.trade_price?.toLocaleString() ?? 0} 원
                     </StyledInnerText>
                   </InnerInnerContainer>
                 </InnerContainer>
