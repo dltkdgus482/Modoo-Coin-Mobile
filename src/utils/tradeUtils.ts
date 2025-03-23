@@ -11,7 +11,7 @@ interface getPastCryptoDataParams {
 }
 
 // Constants
-const baseURL = '/api/v1/candles';
+const baseURL = 'https://api.upbit.com/api/v1/candles';
 
 export const getPastCryptoData = async ({
   type,
