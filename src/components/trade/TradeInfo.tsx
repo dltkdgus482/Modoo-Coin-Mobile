@@ -10,26 +10,36 @@ import { coinArray } from '../../mocks/constants';
 
 const TradeInfo = () => {
   const { coinName } = useParams<{ coinName: string }>();
-  const  coinPrices = useMergedTradeData(coinArray);
+  const coinPrices = useMergedTradeData(coinArray);
 
   if (!coinName) return null;
+
+  const price = coinPrices[coinName]?.trade_price ?? 0;
+  const change = coinPrices[coinName]?.change;
+  const changePrice = coinPrices[coinName]?.change_price ?? 0;
+  const changeRate = coinPrices[coinName]?.change_rate ?? 0;
+
+  const formattedChangePrice = isNaN(changePrice)
+    ? '0'
+    : parseInt(changePrice.toFixed(0)).toLocaleString();
+
+  const formattedChangeRate = isNaN(changeRate)
+    ? '0.00'
+    : (changeRate * 100).toFixed(2);
 
   return (
     <Container>
       <StyledText style={{ fontSize: '1.8rem' }}>{coinName}</StyledText>
       <StyledText style={{ fontSize: '1.8rem' }}>
-        {coinPrices[coinName]?.trade_price?.toLocaleString() ?? 0}
+        {isNaN(price) ? '0' : price.toLocaleString()}
       </StyledText>
       <StyledText
         style={{
-          color: coinPrices[coinName]?.change === 'RISE' ? '#E90061' : 'blue',
+          color: change === 'RISE' ? '#E90061' : 'blue',
         }}
       >
-        {coinPrices[coinName]?.change === 'RISE' ? '+' : ''}
-        {parseInt(
-          coinPrices[coinName]?.change_price?.toFixed(0) ?? 0
-        ).toLocaleString()}{' '}
-        ({(+coinPrices[coinName]?.change_rate * 100)?.toFixed(2) ?? 0})%
+        {change === 'RISE' ? '+' : ''}
+        {formattedChangePrice} ({formattedChangeRate})%
       </StyledText>
     </Container>
   );

@@ -44,7 +44,6 @@ const TradeChart = () => {
   );
 
   useEffect(() => {
-<<<<<<< HEAD
     if (coinName !== 'KRW-POT') return;
 
     setData([
@@ -64,14 +63,6 @@ const TradeChart = () => {
       const result = await getPastCryptoData({ type, coinName });
       setData(result);
     };
-
-=======
-    const fetchData = async () => {
-      const result = await getPastCryptoData({ type, coinName });
-      setData(result);
-    };
-
->>>>>>> 8712fe7da65cee0fd651921522838035084b3ef0
     fetchData();
   }, [type]);
 

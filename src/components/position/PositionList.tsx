@@ -59,14 +59,26 @@ const PositionList = () => {
                       {position.coinName}
                     </StyledInnerText>
                     <StyledInnerText>
-                      {(
-                        
-                        (coinPrices[position.coinName]?.trade_price -
-                          position?.entryPrice) *
-                        (position?.orderType === 'Long' ? 1 : -1) *
-                        position?.quantity
-                      ).toLocaleString()}{' '}
-                      원
+                      {(() => {
+                        const marketPrice =
+                          coinPrices[position.coinName]?.trade_price;
+
+                        if (
+                          !marketPrice ||
+                          !position.entryPrice ||
+                          !position.quantity
+                        )
+                          return '0 원';
+
+                        const diff =
+                          (marketPrice - position.entryPrice) *
+                          (position.orderType === 'Long' ? 1 : -1) *
+                          position.quantity;
+
+                        const profit = isNaN(diff) ? 0 : diff;
+
+                        return `${profit.toLocaleString()} 원`;
+                      })()}
                     </StyledInnerText>
                   </InnerInnerContainer>
                 </InnerContainer>
