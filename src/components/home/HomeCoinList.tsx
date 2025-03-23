@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { coinArray } from '../../mocks/constants';
 
 // Store
-import useCoinStore from '../../store/coin.ts';
+import { useMergedTradeData } from '../../hooks/useMergedTradeData.ts';
 
 // Assets
 import BTC from '/src/assets/coin/KRW-BTC.png';
@@ -14,6 +14,7 @@ import ETH from '/src/assets/coin/KRW-ETH.png';
 import XRP from '/src/assets/coin/KRW-XRP.png';
 import DOT from '/src/assets/coin/KRW-DOT.png';
 import ADA from '/src/assets/coin/KRW-ADA.png';
+import POT from '/src/assets/coin/KRW-POT.png';
 
 const coinNameMap: Record<string, string> = {
   'KRW-BTC': BTC,
@@ -21,42 +22,40 @@ const coinNameMap: Record<string, string> = {
   'KRW-XRP': XRP,
   'KRW-DOT': DOT,
   'KRW-ADA': ADA,
+  'KRW-POT': POT,
 };
 
 const HomeCoinList = () => {
-  const { coinPrices } = useCoinStore();
+  const  coinPrices = useMergedTradeData(coinArray);
   const navigate = useNavigate();
 
   return (
     <Container>
       <StyledText>가상화폐</StyledText>
       <CoinListContainer>
-        {coinArray.length &&
-          coinArray.map((coin, i) => {
-            return (
-              <Account key={i}>
-                <InnerContainer>
-                  <ImgContainer>
-                    <AccountLogo
-                      src={coinNameMap[coin]}
-                      alt={'hanabank-logo'}
-                    />
-                  </ImgContainer>
-                  <InnerInnerContainer>
-                    <StyledInnerText style={{ color: 'rgba(0,0,0,0.5)' }}>
-                      {coin}
-                    </StyledInnerText>
-                    <StyledInnerText>
-                      {coinPrices[coin]?.trade_price?.toLocaleString() ?? 0} 원
-                    </StyledInnerText>
-                  </InnerInnerContainer>
-                </InnerContainer>
-                <StyledButton onClick={() => navigate(`/trade/${coin}`)}>
-                  더보기
-                </StyledButton>
-              </Account>
-            );
-          })}
+        {coinArray.map((coin, i) => (
+          <Account key={i}>
+            <InnerContainer>
+              <ImgContainer>
+                <AccountLogo
+                  src={coinNameMap[coin]}
+                  alt={'hanabank-logo'}
+                />
+              </ImgContainer>
+              <InnerInnerContainer>
+                <StyledInnerText style={{ color: 'rgba(0,0,0,0.5)' }}>
+                  {coin}
+                </StyledInnerText>
+                <StyledInnerText>
+                  {coinPrices[coin]?.trade_price?.toLocaleString() ?? 0} 원
+                </StyledInnerText>
+              </InnerInnerContainer>
+            </InnerContainer>
+            <StyledButton onClick={() => navigate(`/trade/${coin}`)}>
+              더보기
+            </StyledButton>
+          </Account>
+        ))}
       </CoinListContainer>
     </Container>
   );
