@@ -1,6 +1,6 @@
-import { generateFakeData } from './../utils/coinGenerateUtils';
 import { useEffect, useState } from 'react';
 import { useUpbitTradeSocket } from './tradeHooks';
+import { generateFakeData } from '../utils/coinGenerateUtils';
 
 export const useMergedTradeData = (markets: string[]) => {
   const realTradeData = useUpbitTradeSocket(markets);
@@ -8,9 +8,27 @@ export const useMergedTradeData = (markets: string[]) => {
 
   useEffect(() => {
     if (realTradeData) {
+      const {
+        code,
+        change_price,
+        change_rate,
+        change,
+        trade_price,
+        opening_price,
+      } = realTradeData;
+
+      const coinInfo: any = {
+        code,
+        change_price,
+        change_rate,
+        change,
+        trade_price,
+        opening_price,
+      };
+
       setMergedData((prev) => ({
         ...prev,
-        [realTradeData.code]: realTradeData,
+        [code]: coinInfo,
       }));
     }
   }, [realTradeData]);
