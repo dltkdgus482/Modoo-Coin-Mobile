@@ -15,6 +15,7 @@ import XRP from '/src/assets/coin/KRW-XRP.png';
 import DOT from '/src/assets/coin/KRW-DOT.png';
 import ADA from '/src/assets/coin/KRW-ADA.png';
 import POT from '/src/assets/coin/KRW-POT.png';
+import useCoinStore from '../../store/coin.ts';
 
 const coinNameMap: Record<string, string> = {
   'KRW-BTC': BTC,
@@ -26,7 +27,7 @@ const coinNameMap: Record<string, string> = {
 };
 
 const HomeCoinList = () => {
-  const  coinPrices = useMergedTradeData(coinArray);
+  const {coinPrices } = useCoinStore();
   const navigate = useNavigate();
 
   return (

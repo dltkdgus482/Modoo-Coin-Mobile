@@ -1,9 +1,9 @@
 export const generateFakeData = () => {
   const fakeCoinList = ['KRW-POT'];
-  const data = {};
+  const data: Record<string, any> = {};
 
   fakeCoinList.forEach((code) => {
-    const basePrice = 100000000;
+    const opening_price = 100000000;
     let changeRate = Math.random() * 0.1 - 0.05;
 
     const eventProbability = Math.random();
@@ -13,15 +13,15 @@ export const generateFakeData = () => {
       changeRate = -(Math.random() * 0.2) - 0.1;
     }
 
-    const newPrice = Math.floor(basePrice * (1 + changeRate));
-    const changePrice = Math.abs(newPrice - basePrice);
-
+    const trade_price = Math.floor(opening_price * (1 + changeRate));
+    const change_price = Math.abs(trade_price - opening_price);
     data[code] = {
-      trade_price: newPrice,
-      prev_closing_price: basePrice,
-      change: changeRate > 0 ? 'RISE' : 'FALL',
-      change_price: changePrice,
+      code,
+      trade_price,
+      opening_price,
+      change_price,
       change_rate: Math.abs(changeRate),
+      change: changeRate > 0 ? 'RISE' : 'FALL',
     };
   });
 

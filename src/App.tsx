@@ -15,6 +15,7 @@ import useCoinStore from './store/coin';
 
 // Constants
 import { coinArray } from './mocks/constants';
+import { useFakePOT } from './hooks/useFakePOT';
 
 function App() {
   const { username } = useUserStore();
@@ -36,6 +37,7 @@ function App() {
   }, []);
 
   const tradeData = useUpbitTradeSocket(coinArray);
+  useFakePOT();
 
   useEffect(() => {
     if (!tradeData || !tradeData.code) return;
