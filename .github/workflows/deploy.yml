@@ -53,12 +53,19 @@ jobs:
           echo "🔑 SSH 키를 설정합니다."
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 400 private_key.pem
-          echo "✅ SSH 키 설정 완료!"
+      
+          echo "📂 EC2에 임시 디렉토리 생성"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST "mkdir -p ~/temp-dist"
+      
+          echo "📤 dist 폴더 EC2로 전송 중..."
+          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./dist/* $EC2_USER@$EC2_HOST:~/temp-dist/
+      
+          echo "🚀 서버에서 sudo로 /var/www/html/에 복사"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+            sudo rm -rf /var/www/html/*
+            sudo cp -r ~/temp-dist/* /var/www/html/
+            rm -rf ~/temp-dist
+          EOF
+      
+          echo "🎉 배포 완료!"
 
-          echo "🔗 EC2 서버와 연결을 시도합니다."
-          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST "echo SSH Connection Successful"
-          echo "✅ EC2 연결 성공!"
-
-          echo "📤 빌드된 파일을 EC2에 업로드합니다."
-          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./dist/* $EC2_USER@$EC2_HOST:/var/www/html/
-          echo "✅ 빌드된 파일 업로드 완료!"
