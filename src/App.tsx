@@ -51,7 +51,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeContainer />} />
         <Route path="/trade/:coinName" element={<TradeContainer />} />
-        {/* <Route path="/purchase" element={<PurchaseContainer />} /> */}
+        <Route path="/purchase/:coinName/:orderType" element={<PurchaseContainer />} />
       </Routes>
     </BrowserRouter>
   );

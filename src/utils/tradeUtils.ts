@@ -3,11 +3,11 @@ interface CryptoDataProps {
   market: string;
   timestamp: number;
   trade_price: number;
-  opening_price: number;
 }
 
 interface getPastCryptoDataParams {
   type: string;
+  coinName: string | undefined;
 }
 
 // Constants
@@ -15,9 +15,10 @@ const baseURL = '/api/v1/candles';
 
 export const getPastCryptoData = async ({
   type,
+  coinName,
 }: getPastCryptoDataParams): Promise<CryptoDataProps[]> => {
   const params = new URLSearchParams({
-    market: 'KRW-BTC',
+    market: coinName || 'KRW-BTC',
     to: getKSTTimeISOString(),
     count: '60',
   }).toString();

@@ -5,19 +5,29 @@ interface PurchaseInfoProps {
 
 // Libraries
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+
+// Store
+import useCoinStore from '../../store/coin';
 
 const PurchaseInfo = ({ currentInput }: PurchaseInfoProps) => {
-  const cryptoPrice = 119000;
+  const { coinName } = useParams();
+  const { coinPrices } = useCoinStore();
+
+  if (!coinName) return null;
 
   return (
     <Container>
       <UpperContainer>
-        <p style={{color: 'rgba(0,0,0,0.45)' }}>주문할 가격</p>
-        <p style={{color: '#008485'}}>{cryptoPrice.toLocaleString()} 원</p>
+        <p style={{ color: 'rgba(0,0,0,0.45)' }}>주문할 가격</p>
+        <p style={{ color: '#008485' }}>
+          {coinPrices[coinName].trade_price.toLocaleString()} 원
+        </p>
       </UpperContainer>
       <LowerContainer>
         <p style={{ textAlign: 'center', fontSize: '3rem' }}>
-          {parseInt(currentInput.join('')).toLocaleString()} BTC
+          {parseInt(currentInput.join('')).toLocaleString()}{' '}
+          {coinName.split('-')[1]}
         </p>
         <p
           style={{
@@ -26,7 +36,10 @@ const PurchaseInfo = ({ currentInput }: PurchaseInfoProps) => {
             color: 'rgba(0,0,0, 0.4)',
           }}
         >
-          {(cryptoPrice * parseInt(currentInput.join(''))).toLocaleString()} 원
+          {(
+            coinPrices[coinName].trade_price * parseInt(currentInput.join(''))
+          ).toLocaleString()}{' '}
+          원
         </p>
       </LowerContainer>
     </Container>

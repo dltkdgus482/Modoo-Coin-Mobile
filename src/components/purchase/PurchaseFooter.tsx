@@ -3,16 +3,58 @@ interface PurchaseFooterProps {
   currentInput: number[];
 }
 
-import { useNavigate } from 'react-router-dom';
+interface position {
+  coinName: string;
+  entryData: string;
+  entryPrice: number;
+  orderType: string;
+  quantity: number;
+}
+
 // Libraries
 import styled from 'styled-components';
+import useUserStore from '../../store/user';
+import useCoinStore from '../../store/coin';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PurchaseFooter = ({ currentInput }: PurchaseFooterProps) => {
   const navigate = useNavigate();
+  const { coinName, orderType } = useParams();
+  const { balance, positionArray, setPositionArray, setBalance } =
+    useUserStore();
+  const { coinPrices } = useCoinStore();
 
   return (
     <Container>
-      <StyledButton onClick={() => navigate('/trade')}>확인</StyledButton>
+      <StyledButton
+        onClick={() => {
+          if (!coinName || !orderType) {
+            return;
+          }
+
+          const currentPrice = coinPrices[coinName].trade_price;
+          const quantity = parseInt(currentInput.join(''));
+
+          if (currentPrice * quantity > balance) {
+            alert('잔액이 부족합니다.');
+            return;
+          }
+
+          const newPosition: position = {
+            coinName,
+            entryData: new Date().toISOString(),
+            entryPrice: currentPrice,
+            orderType: orderType,
+            quantity,
+          };
+
+          setBalance(balance - currentPrice * quantity);
+          setPositionArray([...positionArray, newPosition]);
+          navigate(`/trade/${coinName}`);
+        }}
+      >
+        확인
+      </StyledButton>
     </Container>
   );
 };

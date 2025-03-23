@@ -1,19 +1,23 @@
 // Assets
-import { useNavigate } from 'react-router-dom';
 import backArrow from '../../assets/trade/backArrow.png';
 
 // Libraries
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const PurchaseHeader = () => {
   const navigate = useNavigate();
+  const { coinName } = useParams();
+
+  if (!coinName) return null;
 
   return (
     <Container>
       <BackButton
         src={backArrow}
         alt="back-arrow"
-        onClick={() => navigate('/trade')}
+        onClick={() => navigate(`/trade/${coinName}`)}
       />
     </Container>
   );

@@ -9,6 +9,7 @@ interface CryptoDataProps {
 import { getPastCryptoData } from '../../utils/tradeUtils';
 
 // Libraries
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import {
@@ -24,6 +25,8 @@ import {
 import TradeChartOption from './TradeChartOption';
 
 const TradeChart = () => {
+  const { coinName } = useParams();
+  const [data, setData] = useState<CryptoDataProps[]>([]);
   const [type, setType] = useState<string>('seconds');
   const [isAnimated, setIsAnimated] = useState<boolean>(false);
   const [minDataPoint, setMinDataPoint] = useState<CryptoDataProps | null>(
@@ -35,7 +38,7 @@ const TradeChart = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getPastCryptoData({ type: type });
+      const result = await getPastCryptoData({ type, coinName });
       setData(result);
     };
 

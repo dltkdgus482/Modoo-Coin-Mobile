@@ -1,0 +1,38 @@
+# .github/workflows/deploy.yml
+
+name: Deploy Frontend to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    if: github.repository_owner == 'dltkdgus482'
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 저장소 체크아웃
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. 배포 (EC2 서버로 파일 전송)
+      - name: Deploy to AWS EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          echo "🔑 SSH 키를 설정합니다."
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 400 private_key.pem
+          echo "✅ SSH 키 설정 완료!"
+
+          echo "🔗 EC2 서버와 연결을 시도합니다."
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST "echo SSH Connection Successful"
+          echo "✅ EC2 연결 성공!"
+
+          echo "📤 파일을 EC2에 업로드합니다."
+          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./dist $EC2_USER@$EC2_HOST:/home/ubuntu/legend-repo/
+          echo "✅ 파일 업로드 완료!"

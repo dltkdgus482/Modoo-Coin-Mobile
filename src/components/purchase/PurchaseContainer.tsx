@@ -12,12 +12,12 @@ const PurchaseContainer = () => {
 
   return (
     <Container>
-      <PurchaseHeader></PurchaseHeader>
+      <PurchaseHeader />
       <PurchaseMain
         currentInput={currentInput}
         setCurrentInput={setCurrentInput}
       ></PurchaseMain>
-      <PurchaseFooter currentInput={currentInput}></PurchaseFooter>
+      <PurchaseFooter currentInput={currentInput} />
     </Container>
   );
 };

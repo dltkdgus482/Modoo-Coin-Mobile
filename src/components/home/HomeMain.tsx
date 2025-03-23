@@ -4,12 +4,14 @@ import styled from 'styled-components';
 // Other Components
 import HomeUser from './HomeUser';
 import HomeCoinList from './HomeCoinList';
+import PositionList from '../position/PositionList';
 
 const HomeMain = () => {
   return (
     <Container>
       <HomeUser />
       <HomeCoinList />
+      <PositionList />
     </Container>
   );
 };

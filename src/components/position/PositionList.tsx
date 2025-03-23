@@ -1,53 +1,92 @@
 // Libraries
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-
-// Contants
-import { coinArray } from '../../mocks/constants';
 
 // Store
+import useUserStore from '../../store/user.ts';
 import useCoinStore from '../../store/coin.ts';
 
-const HomeCoinList = () => {
+const PositionList = () => {
+  const {
+    positionArray,
+    balance,
+    setBalance,
+    setPositionArray,
+    setTradeData,
+    tradeData,
+  } = useUserStore();
   const { coinPrices } = useCoinStore();
-  const navigate = useNavigate();
 
   return (
     <Container>
-      <StyledText>가상화폐</StyledText>
+      <StyledText>현재 포지션</StyledText>
       <CoinListContainer>
-        {coinArray.length &&
-          coinArray.map((coin, i) => {
+        {positionArray.length > 0 ?
+          positionArray.map((position, i) => {
             return (
               <Account key={i}>
                 <InnerContainer>
                   <ImgContainer>
                     <AccountLogo
-                      src={`/src/assets/coin/${coin}.png`}
+                      src={`/src/assets/coin/${position.coinName}.png`}
                       alt={'hanabank-logo'}
                     />
                   </ImgContainer>
                   <InnerInnerContainer>
                     <StyledInnerText style={{ color: 'rgba(0,0,0,0.5)' }}>
-                      {coin}
+                      {position.coinName}
                     </StyledInnerText>
                     <StyledInnerText>
-                      {coinPrices[coin].trade_price.toLocaleString()}원
+                      {coinPrices[
+                        position.coinName
+                      ].trade_price.toLocaleString()}
+                      원
                     </StyledInnerText>
                   </InnerInnerContainer>
                 </InnerContainer>
-                <StyledButton onClick={() => navigate(`/trade/${coin}`)}>
-                  더보기
+                <StyledButton
+                  onClick={() => {
+                    const marketPrice =
+                      coinPrices[position.coinName]?.trade_price;
+
+                    if (!marketPrice) return;
+
+                    const temp =
+                      (marketPrice - position.entryPrice) * position.quantity;
+
+                    const profit = position.orderType === 'Long' ? temp : -temp;
+
+                    const newTradeData = {
+                      benefit: profit,
+                      clearPrice: marketPrice,
+                      entryPrice: position.entryPrice,
+                      entryTime: position.entryData,
+                      clearTime: new Date().toISOString(),
+                      coinName: position.coinName,
+                      orderType: position.orderType,
+                    };
+
+                    const updatedPositions = positionArray.filter(
+                      (p) => p !== position
+                    );
+
+                    setPositionArray(updatedPositions);
+                    setTradeData([...tradeData, newTradeData]);
+                    setBalance(
+                      balance + position.entryPrice * position.quantity + profit
+                    );
+                  }}
+                >
+                  청산
                 </StyledButton>
               </Account>
             );
-          })}
+          }) : <div>현재 포지션이 없습니다.</div>}
       </CoinListContainer>
     </Container>
   );
 };
 
-export default HomeCoinList;
+export default PositionList;
 
 // Styled Components
 const Container = styled.div`
@@ -55,12 +94,13 @@ const Container = styled.div`
   height: 60%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-start;
   border-radius: 30px;
   background-color: white;
   padding: 6%;
   gap: 6%;
+  overflow: hidden;
 `;
 
 const StyledText = styled.p`
@@ -139,13 +179,14 @@ const StyledInnerText = styled.span`
 
 const CoinListContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: auto;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-center;
   gap: min(8%, 20px);
+  padding-top: 10px;
 
   /* 스크롤바 스타일 자동 (macOS에서는 기본) */
   scrollbar-width: auto; /* Firefox */
