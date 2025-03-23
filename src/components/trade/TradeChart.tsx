@@ -23,8 +23,9 @@ import {
 // Other Components
 import TradeChartOption from './TradeChartOption';
 
-const TradeChart = ({ data, setData }) => {
+const TradeChart = () => {
   const [type, setType] = useState<string>('seconds');
+  const [isAnimated, setIsAnimated] = useState<boolean>(false);
   const [minDataPoint, setMinDataPoint] = useState<CryptoDataProps | null>(
     null
   );
@@ -80,7 +81,7 @@ const TradeChart = ({ data, setData }) => {
             stroke="#008485"
             strokeWidth={2}
             dot={false}
-            isAnimationActive={true}
+            isAnimationActive={isAnimated}
           />
           {maxDataPoint && (
             <ReferenceDot
@@ -116,7 +117,7 @@ const TradeChart = ({ data, setData }) => {
           )}
         </LineChart>
       </ResponsiveContainer>
-      <TradeChartOption setType={setType} />
+      <TradeChartOption setType={setType} setIsAnimated={setIsAnimated} />
     </Container>
   );
 };

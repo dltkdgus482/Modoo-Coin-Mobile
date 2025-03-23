@@ -1,32 +1,32 @@
-// Types
-interface TradeInfoProps {
-  coinName: string;
-  currentPrice: number;
-  changeSign: number;
-  changeRate: string;
-}
-
 // Libraries
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
-const TradeInfo: React.FC<TradeInfoProps> = ({
-  coinName,
-  currentPrice,
-  changeSign,
-  changeRate,
-}) => {
-  const changePrice = currentPrice * +changeRate;
+// Store
+import useCoinStore from '../../store/coin';
+
+const TradeInfo = ({}) => {
+  const { coinName } = useParams<{ coinName: string }>();
+  const { coinPrices } = useCoinStore();
+
+  if (!coinName) return null;
 
   return (
     <Container>
       <StyledText style={{ fontSize: '1.8rem' }}>{coinName}</StyledText>
       <StyledText style={{ fontSize: '1.8rem' }}>
-        {currentPrice ? currentPrice.toLocaleString() : 0}
+        {coinPrices[coinName].trade_price.toLocaleString()}
       </StyledText>
-      <StyledText style={{ color: +changeRate > 0 ? '#E90061' : 'blue' }}>
-        {changeSign === 1 ? '+' : ''}
-        {parseInt(changePrice.toFixed(0)).toLocaleString()} (
-        {(+changeRate * 100).toFixed(2)})%
+      <StyledText
+        style={{
+          color: coinPrices[coinName].change === 'RISE' ? '#E90061' : 'blue',
+        }}
+      >
+        {coinPrices[coinName].change === 'RISE' ? '+' : ''}
+        {parseInt(
+          coinPrices[coinName].change_price.toFixed(0)
+        ).toLocaleString()}{' '}
+        ({(+coinPrices[coinName].change_rate * 100).toFixed(2)})%
       </StyledText>
     </Container>
   );

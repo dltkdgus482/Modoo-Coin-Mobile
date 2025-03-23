@@ -45,3 +45,7 @@ const getKSTTimeISOString = (): string => {
   const isoString = kstDate.toISOString().split('.')[0];
   return `${isoString}+09:00`;
 };
+
+export const getCurretPrice = (coinName: string): number => {
+  return 0;
+};

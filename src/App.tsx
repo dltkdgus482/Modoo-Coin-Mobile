@@ -1,53 +1,47 @@
-// Types
-interface CryptoDataProps {
-  market: string;
-  timestamp: number;
-  trade_price: number;
-}
-
-// Libraries
+// App.tsx
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Hooks
-import { useUpbitTradeSocket } from './hooks/tradeHooks';
-
-// Other Components
+// Components
 import TradeContainer from './components/trade/TradeContainer';
 import HomeContainer from './components/home/HomeContainer';
 import PurchaseContainer from './components/purchase/PurchaseContainer';
 import NameModal from './components/Modal/NameModal';
 
-// Store
+// Hooks & Stores
+import { useUpbitTradeSocket } from './hooks/tradeHooks';
 import useUserStore from './store/user';
+import useCoinStore from './store/coin';
+
+// Constants
+import { coinArray } from './mocks/constants';
 
 function App() {
-  const [inputName, setInputName] = useState<string>('');
-  const trade = useUpbitTradeSocket('KRW-BTC');
-  const [data, setData] = useState<CryptoDataProps[]>([]);
   const { username } = useUserStore();
+  const { setCoinInfo } = useCoinStore();
+  const [inputName, setInputName] = useState<string>('');
+
+  // 초기 coin 상태 설정
+  useEffect(() => {
+    coinArray.forEach((coin) => {
+      setCoinInfo(coin, {
+        code: coin,
+        change: 'RISE',
+        change_price: 0,
+        trade_price: 0,
+        opening_price: 0,
+        change_rate: 0.0,
+      });
+    });
+  }, []);
+
+  const tradeData = useUpbitTradeSocket(coinArray);
 
   useEffect(() => {
-    if (!trade) return;
+    if (!tradeData || !tradeData.code) return;
 
-    const newPoint: CryptoDataProps = {
-      market: trade.code,
-      timestamp: trade.timestamp,
-      trade_price: trade.trade_price,
-    };
-
-    setData((prev) => {
-      if (
-        prev.length > 0 &&
-        prev[prev.length - 1].timestamp === newPoint.timestamp
-      ) {
-        return prev;
-      }
-
-      const updated = [...prev, newPoint];
-      return updated.length > 60 ? updated.slice(updated.length - 60) : updated;
-    });
-  }, [trade]);
+    setCoinInfo(tradeData.code, tradeData);
+  }, [tradeData]);
 
   return (
     <BrowserRouter>
@@ -55,12 +49,9 @@ function App() {
         <NameModal inputName={inputName} setInputName={setInputName} />
       )}
       <Routes>
-        <Route path="/" element={<HomeContainer data={data} />} />
-        <Route
-          path="/trade"
-          element={<TradeContainer data={data} setData={setData} />}
-        />
-        <Route path="/purchase" element={<PurchaseContainer />} />
+        <Route path="/" element={<HomeContainer />} />
+        <Route path="/trade/:coinName" element={<TradeContainer />} />
+        {/* <Route path="/purchase" element={<PurchaseContainer />} /> */}
       </Routes>
     </BrowserRouter>
   );

@@ -5,12 +5,11 @@ import styled from 'styled-components';
 import HomeUser from './HomeUser';
 import HomeCoinList from './HomeCoinList';
 
-const HomeMain = ({data}) => {
+const HomeMain = () => {
   return (
     <Container>
       <HomeUser />
-      <HomeCoinList data={data}/>
-      <HomeCoinList data={data}/>
+      <HomeCoinList />
     </Container>
   );
 };

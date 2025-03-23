@@ -2,26 +2,22 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const HomeCoinList = ({ data }) => {
-  const coinArr: string[] = [
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-    'KRW-BTC',
-  ];
+// Contants
+import { coinArray } from '../../mocks/constants';
 
+// Store
+import useCoinStore from '../../store/coin.ts';
+
+const HomeCoinList = () => {
+  const { coinPrices } = useCoinStore();
   const navigate = useNavigate();
 
   return (
     <Container>
       <StyledText>가상화폐</StyledText>
       <CoinListContainer>
-        {data.length &&
-          coinArr.map((coin, i) => {
+        {coinArray.length &&
+          coinArray.map((coin, i) => {
             return (
               <Account key={i}>
                 <InnerContainer>
@@ -33,14 +29,14 @@ const HomeCoinList = ({ data }) => {
                   </ImgContainer>
                   <InnerInnerContainer>
                     <StyledInnerText style={{ color: 'rgba(0,0,0,0.5)' }}>
-                      {coin} 님의 계좌
+                      {coin}
                     </StyledInnerText>
                     <StyledInnerText>
-                      {data[0].trade_price.toLocaleString()}원
+                      {coinPrices[coin].trade_price.toLocaleString()}원
                     </StyledInnerText>
                   </InnerInnerContainer>
                 </InnerContainer>
-                <StyledButton onClick={() => navigate('/trade')}>
+                <StyledButton onClick={() => navigate(`/trade/${coin}`)}>
                   더보기
                 </StyledButton>
               </Account>

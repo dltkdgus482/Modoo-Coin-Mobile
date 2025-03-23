@@ -1,4 +1,5 @@
 // Types
+
 interface position {
   coinName: string;
   entryData: string;

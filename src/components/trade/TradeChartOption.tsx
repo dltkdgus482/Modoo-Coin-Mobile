@@ -1,6 +1,7 @@
 // Types
 interface TradeChartOptionProps {
   setType: (type: string) => void;
+  setIsAnimated: (isAnimated: boolean) => void;
 }
 
 // Types
@@ -21,7 +22,10 @@ const mappingOptions = {
   '1년': 'years',
 } as const;
 
-const TradeChartOption = ({ setType }: TradeChartOptionProps) => {
+const TradeChartOption = ({
+  setType,
+  setIsAnimated,
+}: TradeChartOptionProps) => {
   const [currentOption, setCurrentOption] = useState<string>('실시간');
   const options: (keyof typeof mappingOptions)[] = [
     '실시간',
@@ -38,8 +42,12 @@ const TradeChartOption = ({ setType }: TradeChartOptionProps) => {
           key={option}
           selected={currentOption === option}
           onClick={() => {
+            setIsAnimated(true);
             setCurrentOption(option);
             setType(mappingOptions[option]);
+            setTimeout(() => {
+              setIsAnimated(false);
+            }, 2000);
           }}
         >
           {option}

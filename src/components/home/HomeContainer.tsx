@@ -6,11 +6,11 @@ import HomeHeader from './HomeHeader';
 import HomeMain from './HomeMain';
 import HomeFooter from './HomeFooter';
 
-const HomeContainer = ({ data }) => {
+const HomeContainer = () => {
   return (
     <Container>
       <HomeHeader />
-      <HomeMain data={data} />
+      <HomeMain />
       <HomeFooter />
     </Container>
   );
