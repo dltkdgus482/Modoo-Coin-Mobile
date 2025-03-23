@@ -11,14 +11,14 @@ import useCoinStore from '../../store/coin.ts';
 // Assets
 import BTC from '/src/assets/coin/KRW-BTC.png';
 import ETH from '/src/assets/coin/KRW-ETH.png';
-import XPR from '/src/assets/coin/KRW-XPR.png';
+import XRP from '/src/assets/coin/KRW-XRP.png';
 import DOT from '/src/assets/coin/KRW-DOT.png';
 import ADA from '/src/assets/coin/KRW-ADA.png';
 
 const coinNameMap: Record<string, string> = {
   'KRW-BTC': BTC,
   'KRW-ETH': ETH,
-  'KRW-XRP': XPR,
+  'KRW-XRP': XRP,
   'KRW-DOT': DOT,
   'KRW-ADA': ADA,
 };
